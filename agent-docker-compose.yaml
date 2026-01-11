@@ -9,7 +9,7 @@ services:
       - web # Hack to avoid DB not being fully available
     networks:
       - default
-      - shared_net
+      - caroni_shared_net
 
   web:
     image: ghcr.io/shaunbrady/caroniagent-django:latest

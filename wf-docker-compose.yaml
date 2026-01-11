@@ -40,7 +40,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - default
-      - shared_net
+      - caroni_shared_net
 
   sitestub:
     image: ghcr.io/shaunbrady/caroniwf-sitestub:latest
