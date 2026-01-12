@@ -37,7 +37,7 @@ docker network create caroni_shared_net
 
 Instantiate the Workflow manager, and then an agent
 ```bash
-docker compose -f "wf-docker-compose.yaml " up 
+docker compose -f "wf-docker-compose.yaml" up 
 docker compose -f "agent-docker-compose.yaml " up 
 ```
 
