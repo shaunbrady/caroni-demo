@@ -11,7 +11,7 @@ services:
       - default
       - caroni_shared_net
 
-  web:
+  agentweb:
     image: ghcr.io/shaunbrady/caroniagent-django:latest
     ports:
       - "8001:8000"
