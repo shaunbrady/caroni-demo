@@ -6,7 +6,7 @@ services:
       AMQP_URL: amqp://user:pass@rabbitmq:5672/
     depends_on:
       - db
-      - web # Hack to avoid DB not being fully available
+      - agentweb # Hack to avoid DB not being fully available
     networks:
       - default
       - caroni_shared_net
