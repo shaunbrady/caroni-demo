@@ -1,6 +1,6 @@
 services:
   wfagent:
-    image: ghcr.io/shaunbrady/caroniagent-wf_agent:latest
+    image: ghcr.io/shaunbrady/caroniagent-wf_agent:0.0.1
     environment:
       DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
       AMQP_URL: amqp://user:pass@rabbitmq:5672/
@@ -12,7 +12,7 @@ services:
       - caroni_shared_net
 
   agentweb:
-    image: ghcr.io/shaunbrady/caroniagent-django:latest
+    image: ghcr.io/shaunbrady/caroniagent-django:0.0.1
     ports:
       - "8001:8000"
     environment:
