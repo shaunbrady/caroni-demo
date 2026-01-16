@@ -54,12 +54,10 @@ http://127.0.0.1:8001/admin for the agent (Watch Jobs/Job Inputs/Job Outputs)
 Finally, fire off a job. Log in to the site-stub container, and execute a python
 script that simulates a website or other actor requesting that the workflow
 manager fire off a job of a given type.
-```
-docker ps | grep sitestub # The first column will be the container id
-```
+
 Enter the sitestub container:
-```
-docker exec -it 8c44404ce4f8 bash
+```base
+docker compose -f wf-docker-compose.yaml exec sitestub bash
 ```
 At the prompt, simlar to `root@8c44404ce4f8:/app#`
 type:
