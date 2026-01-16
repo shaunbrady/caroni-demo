@@ -71,6 +71,56 @@ CARONIROCKSappend" in it's output.  Repeat the above command with your own
 string, and observe the jobs manipulate it and ultimately return that to the
 workflow manager.
 
+## Sequence diagrams
+This diagram demonstrates the happy path of an workflow manager getting work
+done on workflow agents.  It is broken into a few "phases" mostly for
+readability.
+
+This diagram shows a workflow of two jobs getting those jobs fulfilled.
+
+```mermaid
+sequenceDiagram
+    participant M as Manager
+    participant AgentsTopic@{ "type" : "collections" }
+    participant A as AgentA
+    participant B as AgentB
+    M->>AgentsTopic: JobFulfillmentRequest(request_uuidA, job_typeA)
+    M->>AgentsTopic: JobFulfillmentRequest(request_uuidB, job_typeB)
+    A->>M: JobFulfillmentOffer(request_uuidA, offer_uuidA)
+    B-->>M: JobFulfillmentDecline(request_uuidA)
+    M->>A: JobFulfillmentOfferAccept(request_uuidA, offer_uuidA)
+    A->>M: JobAccepted(job_uuidA, offer_uuidA)
+    B->>M: JobFulfillmentOffer(request_uuidB, offer_uuidB)
+    M->>B: JobFulfillmentOfferAccept(request_uuidB, offer_uuidB)
+    B->>M: JobAccepted(job_uuidB, offer_uuidB)
+    Note over A,B: A, B responses can be interleaved <br />but each follows same flow.
+
+```
+
+This diagram shows how data flow from one job to another via the manager.
+```mermaid
+sequenceDiagram
+    participant M as Manager
+    participant A as AgentA
+    participant B as AgentB
+    M->>A: JobStatusRequest(job_uuidA)
+    A->>M: JobStatusUpdate(job_uuidA, "pending")
+    M->>A: JobDataReady(job_uuidA, Input_from_Workflow)
+    Note right of A: jobA has all data needs met and is queued
+    A->>M: JobStatusUpdate(job_uuidA, "queued")
+    A->>M: JobStatusUpdate(job_uuidA, "running")
+    A->>A: Execute Job
+    A->>M: JobDataReady(job_uuidA, Output_from_A)
+    A->>M: JobStatusUpdate(job_uuidA, "complete")
+    M->>B: JobDataReady(job_uuidB, Output_from_A)
+    B->>M: JobStatusUpdate(job_uuidB, "queued")
+    B->>M: JobStatusUpdate(job_uuidB, "running")
+    B->>B: Execute Job
+    B->>M: JobDataReady(job_uuidB, Output_from_B_to_Workflow)
+    B->>M: JobStatusUpdate(job_uuidB, "complete")
+
+```
+
 ## Enjoy!
 Caroni will be available as an open source project shortly. Feature requests and
 PRs will be welcome!
