@@ -2,10 +2,10 @@ services:
   wfagent:
     image: ghcr.io/shaunbrady/caroniagent-wf_agent:0.0.1
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+      DATABASE_URL: postgres://myuser:mypassword@agentdb:5432/mydb
       AMQP_URL: amqp://user:pass@rabbitmq:5672/
     depends_on:
-      - db
+      - agentdb
       - agentweb # Hack to avoid DB not being fully available
     networks:
       - default
@@ -16,22 +16,21 @@ services:
     ports:
       - "8001:8000"
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+      DATABASE_URL: postgres://myuser:mypassword@agentdb:5432/mydb
     depends_on:
-      - db
+      - agentdb
 
-  db:
+  agentdb:
     image: postgres:16
     environment:
       POSTGRES_DB: mydb
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - agentpgdata:/var/lib/postgresql/data
 
 volumes:
-  pgdata:
-  rabbitmq_data:
+  agentpgdata:
 
 networks:
   caroni_shared_net:
