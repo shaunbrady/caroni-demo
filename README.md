@@ -37,8 +37,8 @@ docker network create caroni_shared_net
 
 Instantiate the Workflow manager, and then an agent
 ```bash
-docker compose -f "wf-docker-compose.yaml" up 
-docker compose -f "agent-docker-compose.yaml " up 
+docker compose -f "wf-docker-compose.yaml" up
+docker compose -f "agent-docker-compose.yaml " up
 ```
 
 Included fixtures will create workflow templates, Job types, as well as
@@ -59,7 +59,7 @@ Enter the sitestub container:
 ```base
 docker compose -f wf-docker-compose.yaml exec sitestub bash
 ```
-At the prompt, simlar to `root@8c44404ce4f8:/app#`
+At the prompt, similar to `root@8c44404ce4f8:/app#`
 type:
 ```bash
 python site_stub.py caronirocks
@@ -70,6 +70,20 @@ the completed state in the workflows manager, and have "prepended
 CARONIROCKSappend" in it's output.  Repeat the above command with your own
 string, and observe the jobs manipulate it and ultimately return that to the
 workflow manager.
+
+### Optional setup of second agent
+To demonstrate workflows spanning multiple agents, set up a second agent with:
+```bash
+docker compose -f "second-agent-docker-compose.yaml " up
+```
+The admin interface will be at:
+```bash
+http://127.0.0.1:8002/admin for the agent (Watch Jobs/Job Inputs/Job Outputs)
+```
+
+Delete complementing jobs in both agents (Ex: 1 & 3 on one agent, and 2 on the
+other), and then run the workflow as normal.  Look at the Reply To in each
+resultant job in the workflow manger (:8000).
 
 ## Sequence diagrams
 This diagram demonstrates the happy path of an workflow manager getting work
