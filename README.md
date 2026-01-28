@@ -51,6 +51,8 @@ http://127.0.0.1:8000/admin for the workflow manager (Watch Workflows/Steps/Data
 http://127.0.0.1:8001/admin for the agent (Watch Jobs/Job Inputs/Job Outputs)
 ```
 
+> **_NOTE:_**  Because the domains are the same, some browsers hiccup and force re-login as one bounced between the hosts. I'll fix this shortly.
+
 Finally, fire off a job. Log in to the site-stub container, and execute a python
 script that simulates a website or other actor requesting that the workflow
 manager fire off a job of a given type.
