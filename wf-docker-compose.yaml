@@ -1,6 +1,6 @@
 services:
   wfserver:
-    image: ghcr.io/shaunbrady/caroniwf-wf_server:0.0.1
+    image: ghcr.io/shaunbrady/caroniwf-wf_server:v0.0.2
     environment:
       DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
       AMQP_URL: amqp://user:pass@rabbitmq:5672/
@@ -9,7 +9,7 @@ services:
       - rabbitmq
 
   wfweb:
-    image: ghcr.io/shaunbrady/caroniwf-django:0.0.1
+    image: ghcr.io/shaunbrady/caroniwf-django:v0.0.2
     ports:
       - "8000:8000"
     environment:
@@ -43,7 +43,7 @@ services:
       - caroni_shared_net
 
   sitestub:
-    image: ghcr.io/shaunbrady/caroniwf-sitestub:0.0.1
+    image: ghcr.io/shaunbrady/caroniwf-sitestub:v0.0.2
     environment:
       DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
       AMQP_URL: amqp://user:pass@rabbitmq:5672/

@@ -38,7 +38,7 @@ docker network create caroni_shared_net
 Instantiate the Workflow manager, and then an agent
 ```bash
 docker compose -f "wf-docker-compose.yaml" up
-docker compose -f "agent-docker-compose.yaml " up
+docker compose -f "agent-docker-compose.yaml" up
 ```
 
 Included fixtures will create workflow templates, Job types, as well as
@@ -50,6 +50,8 @@ Log in to watch the services create objects, and manage their state.
 http://127.0.0.1:8000/admin for the workflow manager (Watch Workflows/Steps/Dataflows)
 http://127.0.0.1:8001/admin for the agent (Watch Jobs/Job Inputs/Job Outputs)
 ```
+
+> **_NOTE:_**  Because the domains are the same, some browsers hiccup and force re-login as one bounced between the hosts. I'll fix this shortly.
 
 Finally, fire off a job. Log in to the site-stub container, and execute a python
 script that simulates a website or other actor requesting that the workflow
@@ -84,6 +86,26 @@ http://127.0.0.1:8002/admin for the agent (Watch Jobs/Job Inputs/Job Outputs)
 Delete complementing jobs in both agents (Ex: 1 & 3 on one agent, and 2 on the
 other), and then run the workflow as normal.  Look at the Reply To in each
 resultant job in the workflow manger (:8000).
+
+### Optional induction of failure
+
+To introduce a failure, in foojob2 (log in to the agent), replace the job text with
+```bash
+sleep 30; /usr/bin/jq -n --arg out "$(echo "$CARONI_ENV_final_text append")" 'X{out:$out}'
+```
+
+Notice the the capital X that makes the JSON invalid. This causes the job to
+fail (and the manager thus retries).
+
+The sleep 30 is to slow the execution of the jobs, and give you time to correct
+the injected error (take the 'X' out). Watch for the agent to fail the first
+round. Fix the error, and the save the job. Depending on your timing, the agent
+may need to fail once more and then execute (when requested from the manager)
+another version of the job with the error fixed. Eventually the workflow will
+complete, having recovered.
+
+There is a 5 limit of failed jobs (and related workflow steps) before the
+workflow fails completely.
 
 ## Sequence diagrams
 This diagram demonstrates the happy path of an workflow manager getting work
