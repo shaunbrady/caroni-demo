@@ -87,6 +87,26 @@ Delete complementing jobs in both agents (Ex: 1 & 3 on one agent, and 2 on the
 other), and then run the workflow as normal.  Look at the Reply To in each
 resultant job in the workflow manger (:8000).
 
+### Optional induction of failure
+
+To introduce a failure, in foojob2 (log in to the agent), replace the job text with
+```bash
+sleep 30; /usr/bin/jq -n --arg out "$(echo "$CARONI_ENV_final_text append")" 'X{out:$out}'
+```
+
+Notice the the capital X that makes the JSON invalid. This causes the job to
+fail (and the manager thus retries).
+
+The sleep 30 is to slow the execution of the jobs, and give you time to correct
+the injected error (take the 'X' out). Watch for the agent to fail the first
+round. Fix the error, and the save the job. Depending on your timing, the agent
+may need to fail once more and then execute (when requested from the manager)
+another version of the job with the error fixed. Eventually the workflow will
+complete, having recovered.
+
+There is a 5 limit of failed jobs (and related workflow steps) before the
+workflow fails completely.
+
 ## Sequence diagrams
 This diagram demonstrates the happy path of an workflow manager getting work
 done on workflow agents.  It is broken into a few "phases" mostly for
